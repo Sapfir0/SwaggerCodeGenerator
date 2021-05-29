@@ -1,0 +1,15 @@
+{
+  "name": "swaggerGenerator",
+  "version": "1.0.0",
+  "main": "main.ts",
+  "license": "MIT",
+  "type": "module",
+
+  "scripts": {
+    "start": "tsc && node build/main.js"
+  },
+  "dependencies": {
+    "@types/node": "^15.6.1",
+    "fs": "^0.0.1-security"
+  }
+}

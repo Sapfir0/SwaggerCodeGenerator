@@ -1,0 +1,355 @@
+{
+    "swagger": "2.0",
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "API Token must be provided via `Authorization: Bearer ` header"
+      }
+    },
+    "schemes": [
+      "http",
+      "https",
+      "ws",
+      "wss"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/api/users/{id}": {
+        "put": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Update user",
+          "responses": {
+            "200": {
+              "schema": {
+                "$ref": "#/definitions/UserResponse"
+              },
+              "description": "Updated Successfully"
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "x-example": 3,
+              "type": "integer",
+              "required": true,
+              "name": "id",
+              "in": "path",
+              "description": "User ID"
+            },
+            {
+              "schema": {
+                "$ref": "#/definitions/UserRequest"
+              },
+              "required": false,
+              "name": "user",
+              "in": "body",
+              "description": "The user details"
+            }
+          ],
+          "operationId": "ElCloudWeb.UserController.update",
+          "description": "Update all attributes of a user",
+          "consumes": [
+            "application/json"
+          ]
+        },
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Show User",
+          "responses": {
+            "200": {
+              "schema": {
+                "$ref": "#/definitions/UserResponse"
+              },
+              "description": "OK"
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "type": "integer",
+              "required": true,
+              "name": "id",
+              "in": "path",
+              "description": "User ID"
+            }
+          ],
+          "operationId": "ElCloudWeb.UserController.show",
+          "description": "Show a user by ID"
+        },
+        "delete": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Delete User",
+          "responses": {
+            "203": {
+              "description": "No Content - Deleted Successfully"
+            }
+          },
+          "parameters": [
+            {
+              "type": "integer",
+              "required": true,
+              "name": "id",
+              "in": "path",
+              "description": "User ID"
+            }
+          ],
+          "operationId": "ElCloudWeb.UserController.delete",
+          "description": "Delete a user by ID"
+        }
+      },
+      "/api/users": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Create user",
+          "responses": {
+            "201": {
+              "schema": {
+                "$ref": "#/definitions/UserResponse"
+              },
+              "description": "User created OK"
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "x-example": {
+                "user": {
+                  "name": "Joe",
+                  "email": "Joe1@mail.com"
+                }
+              },
+              "schema": {
+                "$ref": "#/definitions/UserRequest"
+              },
+              "required": false,
+              "name": "user",
+              "in": "body",
+              "description": "The user details"
+            }
+          ],
+          "operationId": "ElCloudWeb.UserController.create",
+          "description": "Creates a new user",
+          "consumes": [
+            "application/json"
+          ]
+        },
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "summary": "List Users",
+          "responses": {
+            "200": {
+              "schema": {
+                "$ref": "#/definitions/UsersResponse"
+              },
+              "description": "OK"
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            
+          ],
+          "operationId": "ElCloudWeb.UserController.index",
+          "description": "List all users in the database",
+          "deprecated": false
+        }
+      },
+      "/api/files": {
+        "put": {
+          "tags": [
+            "FileStorage"
+          ],
+          "summary": "Move file",
+          "responses": {
+            
+          },
+          "parameters": [
+            
+          ],
+          "operationId": "ElCloudWeb.FileStorageController.update",
+          "description": "List all files in directory"
+        },
+        "get": {
+          "tags": [
+            "FileStorage"
+          ],
+          "summary": "List files",
+          "responses": {
+            "200": {
+              "schema": {
+                "$ref": "#/definitions/FileResponse"
+              },
+              "description": "OK"
+            }
+          },
+          "parameters": [
+            
+          ],
+          "operationId": "ElCloudWeb.FileStorageController.index",
+          "description": "List all files in directory"
+        },
+        "delete": {
+          "tags": [
+            "FileStorage"
+          ],
+          "summary": "Delete file",
+          "responses": {
+            
+          },
+          "parameters": [
+            
+          ],
+          "operationId": "ElCloudWeb.FileStorageController.delete",
+          "description": "Delete file"
+        }
+      },
+      "/api/file": {
+        "get": {
+          "tags": [
+            "File"
+          ],
+          "summary": "files",
+          "responses": {
+            "200": {
+              "schema": {
+                "$ref": "#/definitions/FileResponse"
+              },
+              "description": "OK"
+            }
+          },
+          "parameters": [
+            
+          ],
+          "operationId": "ElCloudWeb.FileController.show",
+          "description": "Download file in directory"
+        }
+      }
+    },
+    "info": {
+      "version": "1.0",
+      "title": "Liquid Cloud API",
+      "termsOfService": "Open for public",
+      "description": "API Documentation for Liquid Cloud API v1",
+      "contact": {
+        "name": "Alexander Yurev",
+        "email": "alexander.yurev@internet.ru"
+      }
+    },
+    "host": "localhost:4000",
+    "definitions": {
+      "UsersResponse": {
+        "type": "object",
+        "title": "UsersReponse",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "The users details"
+          }
+        },
+        "description": "Response schema for multiple users"
+      },
+      "UserResponse": {
+        "type": "object",
+        "title": "UserResponse",
+        "properties": {
+          "data": {
+            "description": "The user details",
+            "$ref": "#/definitions/User"
+          }
+        },
+        "description": "Response schema for single user"
+      },
+      "UserRequest": {
+        "type": "object",
+        "title": "UserRequest",
+        "properties": {
+          "user": {
+            "description": "The user details",
+            "$ref": "#/definitions/User"
+          }
+        },
+        "description": "POST body for creating a user"
+      },
+      "User": {
+        "type": "object",
+        "title": "User",
+        "required": [
+          "password",
+          "username"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password"
+          }
+        },
+        "description": "A user of the app"
+      },
+      "FileResponse": {
+        "type": "object",
+        "title": "File Response",
+        "properties": {
+          "data": {
+            "description": "The file details",
+            "$ref": "#/definitions/File"
+          }
+        },
+        "description": "Response schema for single file"
+      },
+      "File": {
+        "type": "object",
+        "title": "File",
+        "required": [
+          "filename",
+          "children",
+          "isFolder"
+        ],
+        "properties": {
+          "isFolder": {
+            "type": "bool",
+            "description": "Is folder"
+          },
+          "filename": {
+            "type": "string",
+            "description": "Filename"
+          },
+          "children": {
+            "type": "string",
+            "description": "List of children files"
+          }
+        },
+        "description": "Get list of files in directory"
+      }
+    },
+    "consumes": [
+      "application/json"
+    ]
+  }

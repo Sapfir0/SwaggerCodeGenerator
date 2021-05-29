@@ -1,0 +1,689 @@
+{
+    "swagger": "2.0",
+    "basePath": "/",
+    "paths": {
+      "/areaMap/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "get_area_map",
+          "tags": [
+            "areaMap"
+          ]
+        }
+      },
+      "/areaMap/latlon": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/LatLon"
+              }
+            }
+          },
+          "operationId": "get_lat_lon",
+          "tags": [
+            "areaMap"
+          ]
+        }
+      },
+      "/camera/list": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/CameraList"
+              }
+            }
+          },
+          "summary": "Получить список камер",
+          "operationId": "get_cameras_list",
+          "tags": [
+            "camera"
+          ]
+        }
+      },
+      "/camera/{cameraId}": {
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Camera"
+              }
+            }
+          },
+          "summary": "Получить информацию о камере",
+          "operationId": "get_camera",
+          "tags": [
+            "camera"
+          ]
+        },
+        "post": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "summary": "Добавить новую камеру",
+          "operationId": "post_camera",
+          "parameters": [
+            {
+              "name": "payload",
+              "required": true,
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/CameraDto"
+              }
+            }
+          ],
+          "tags": [
+            "camera"
+          ]
+        }
+      },
+      "/camera/{cameraId}/images": {
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "summary": "Получить только изображения с камеры",
+          "operationId": "get_camera_image_list",
+          "tags": [
+            "camera"
+          ]
+        }
+      },
+      "/compute/cameraDelta{cameraId}": {
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "get_image_by_date_interval_from_camera",
+          "tags": [
+            "compute"
+          ]
+        }
+      },
+      "/compute/{filename}/objects": {
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "summary": "подаем координаты прямоугоьника, возвращаются все события/объекты в дельтта окрестности от него",
+          "operationId": "get_objects_in_rectangle",
+          "tags": [
+            "compute"
+          ]
+        }
+      },
+      "/compute/{filename}/objectsVisualize": {
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "summary": "подаем координаты прямоугольника, вовращается размеченное изображение",
+          "operationId": "get_visualize_objects_from_rectangle",
+          "tags": [
+            "compute"
+          ]
+        }
+      },
+      "/events/log": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/DTOLog"
+              }
+            }
+          },
+          "operationId": "get_event_logger",
+          "tags": [
+            "events"
+          ]
+        },
+        "post": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "post_event_logger",
+          "parameters": [
+            {
+              "name": "payload",
+              "required": true,
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/DTOLog"
+              }
+            }
+          ],
+          "tags": [
+            "events"
+          ]
+        }
+      },
+      "/events/logs": {
+        "post": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "post_events_logger",
+          "parameters": [
+            {
+              "name": "payload",
+              "required": true,
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/DTOLogs"
+              }
+            }
+          ],
+          "tags": [
+            "events"
+          ]
+        }
+      },
+      "/gallery/image/{filename}": {
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Return image"
+            },
+            "400": {
+              "description": "Incorrect filename"
+            },
+            "404": {
+              "description": "Image not found"
+            }
+          },
+          "operationId": "get_image",
+          "tags": [
+            "gallery"
+          ]
+        },
+        "post": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "post_image",
+          "parameters": [
+            {
+              "name": "file",
+              "in": "formData",
+              "type": "file",
+              "required": true,
+              "description": "Image from camera"
+            }
+          ],
+          "consumes": [
+            "multipart/form-data"
+          ],
+          "tags": [
+            "gallery"
+          ]
+        }
+      },
+      "/gallery/imageById/{id}": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Image"
+              }
+            }
+          },
+          "operationId": "get_object_information",
+          "tags": [
+            "gallery"
+          ]
+        }
+      },
+      "/gallery/images": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/ImageList"
+              }
+            }
+          },
+          "operationId": "get_image_list",
+          "tags": [
+            "gallery"
+          ]
+        }
+      },
+      "/image/info": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "get_image_info_by_index_of_image",
+          "parameters": [
+            {
+              "name": "cameraId",
+              "in": "query",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "indexOfImage",
+              "in": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "tags": [
+            "image"
+          ]
+        }
+      },
+      "/image/{filename}/info": {
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "get_image_information",
+          "tags": [
+            "image"
+          ]
+        },
+        "post": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "operationId": "post_image_information",
+          "parameters": [
+            {
+              "name": "payload",
+              "required": true,
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/ImageInfo"
+              }
+            }
+          ],
+          "tags": [
+            "image"
+          ]
+        }
+      },
+      "/objectInfo/info": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/ObjectInfo"
+              }
+            }
+          },
+          "operationId": "get_object_information",
+          "tags": [
+            "objectInfo"
+          ]
+        }
+      }
+    },
+    "info": {
+      "title": "Premier-eye API",
+      "version": "0.1",
+      "description": "Small API for object detecton"
+    },
+    "produces": [
+      "application/json"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "tags": [
+      {
+        "name": "gallery"
+      },
+      {
+        "name": "compute"
+      },
+      {
+        "name": "camera"
+      },
+      {
+        "name": "image"
+      },
+      {
+        "name": "objectInfo"
+      },
+      {
+        "name": "events"
+      },
+      {
+        "name": "areaMap"
+      }
+    ],
+    "definitions": {
+      "ImageList": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Image"
+            }
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ]
+      },
+      "Image": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "src": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "src"
+        ]
+      },
+      "CameraDto": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
+      },
+      "Camera": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "onlineDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "view": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/LatLon"
+            }
+          },
+          "coordinates": {
+            "$ref": "#/definitions/LatLon"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Image"
+            }
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "onlineDate",
+          "images",
+          "view",
+          "name",
+          "coordinates"
+        ]
+      },
+      "CameraList": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Camera"
+            }
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ]
+      },
+      "ImageInfo": {
+        "properties": {
+          "numberOfCam": {
+            "type": "integer"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "fixationDatetime": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ObjectInfo"
+            }
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "numberOfCam",
+          "filename",
+          "fixationDatetime",
+          "createdAt",
+          "objects"
+        ]
+      },
+      "ObjectInfo": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "scores": {
+            "type": "number"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "latlon": {
+            "$ref": "#/definitions/LatLon"
+          },
+          "cameraId": {
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "scores",
+          "coordinates",
+          "latlon"
+        ]
+      },
+      "DTOLog": {
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cameraId": {
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "timestamp"
+        ]
+      },
+      "DTOLogs": {
+        "properties": {
+          "titles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cameraId": {
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "titles",
+          "timestamp",
+          "cameraId"
+        ]
+      },
+      "LatLon": {
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lng",
+          "lat"
+        ]
+      }
+    },
+    "responses": {
+      "ParseError": {
+        "description": "When a mask can't be parsed"
+      },
+      "MaskError": {
+        "description": "When any error occurs on mask"
+      }
+    }
+  }
