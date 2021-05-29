@@ -4,12 +4,14 @@
   "main": "main.ts",
   "license": "MIT",
   "type": "module",
-
   "scripts": {
-    "start": "tsc && node build/main.js"
+    "start": "tsc && node build/main.js",
+    "buildSchema": "openapi-typescript ./cloudswagger.json --output ./schema.ts"
   },
   "dependencies": {
+    "@types/json-schema": "^7.0.7",
     "@types/node": "^15.6.1",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "openapi-typescript": "^3.3.1"
   }
 }

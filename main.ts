@@ -1,93 +1,48 @@
 import { exception } from 'console';
 import { readFileSync, writeFileSync } from 'fs';
+import { OpenAPI2 } from './types';
 
 
 
-const getTSType = (swaggerType: string) => {
-    switch (swaggerType) {
-        case 'string':
-        case 'number':
-            return swaggerType
-        case 'boolean':
-            return 'bool'
-        case 'integer':
-            return 'number'
-        case 'object':
-        case 'array':
-            throw new Error()
-        default:
-            break;
-    }
-};
-
-type End = {
-    responses: {
-        [index: string]: any
-    }
-    operationId: string
-    tags: any[]
+const isRequired = (required: boolean) => {
+    return required ? "" : "?"
 }
 
-type Definitions = {
-    [index: string] : {
-        properties: any,
-        required?: string[],
-        type: string
-    }
-    
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+const schema = JSON.parse(readFileSync("C:/Users/sapfi/Documents/projects/swaggerGenerator/cloudswagger.json", 'utf-8')) as OpenAPI2
+
+const getNameOfRoute = (route: string) => {
+    const routeSegments = route.split("/")
+    const lastElem = routeSegments[routeSegments.length - 1]
+    return lastElem.match(new RegExp('{\\w+}')) ? routeSegments[routeSegments.length - 2] : lastElem
 }
-
-type Swagger = {paths: {[index: string] : {[key in Method]: End}}, definitions: Definitions}
-
-const swaggerJson = readFileSync("C:/Users/sapfi/Documents/projects/swaggerGenerator/cloudswagger.json", 'utf-8') as unknown as Swagger
-
 
 type Method = 'post' | 'delete' | 'put' | 'get';
 
-type Endpoint<Response, Error> = {
-    path: string;
-    response: Response;
-    error: Error;
-    params: any;
-};
 
-type EndpointDescription = Map<Method, Endpoint<any, any>>;
+const outputString = ""
+const arr = []
 
-const endpoints = new Map<string, EndpointDescription>();
+for (const [route, endpointDescription] of Object.entries(schema.paths)) {
 
-const types = new Map<string, any>();
-console.log(swaggerJson);
+    const interactionService = `export class ApiInteractionService {
+        constructor(@inject(SERVICE_IDENTIFIER.ApiInteractionService) protected _apiService: IApiInteractionService) {}
+    
+    `
+    
+    console.log(getNameOfRoute(route));
 
-for (const [title, definition] of Object.entries(swaggerJson.definitions)) {
-    const props = []
-    for (const [propName, propDesc] of Object.entries(definition)) {
-        const isRequired = definition.required.includes(propName)
-        props.push(`${propName} ${getTSType(propDesc.type)}`)
-    }
-    types.set(title, props)
-}
-
-console.log(types);
-
-
-for (const path in swaggerJson.paths) {
-    const endpointDesc: EndpointDescription = new Map();
-    const endpointPath = swaggerJson.paths[path];
-
-    for (const method in endpointPath) {
-        const endpoint = endpointPath[method];
-        // console.log(method);
-        const params = endpoint.parameters.map((param) => `${param.name}${param.required ? "" : "?"}: ${getTSType(param.type)}`)
+    const methods = []
+    for (const [method, endpoint] of Object.entries(endpointDescription)) {
+        console.log(endpoint);
         
-        // for (const statusCode in endpoint.responses) {
-        //     console.log(endpoint.responses[statusCode]);
-        // }
+                
+        methods.push(`public ${method}${capitalize(getNameOfRoute(route))} = () => {
 
-
-        
-        // endpointDesc.set(method, {params: params})
-        
+        }`)
     }
 
-    endpoints.set(path, endpointDesc);
+    // console.log(methods);
+    
 }
