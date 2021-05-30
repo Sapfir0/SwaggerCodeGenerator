@@ -1,48 +1,31 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { ClassBuilder } from './ClassBuilder';
-import {capitalize, getNameOfRoute, schemaTypeToTSType} from "./utils"
 import prettier from "prettier"
 import SwaggerToTS, {OpenAPI2} from 'openapi-typescript'
+import { generateClasses } from './swaggerParser';
 
-const schema = JSON.parse(readFileSync("C:/Users/sapfi/Documents/projects/swaggerGenerator/data/cloudswagger.json", 'utf-8')) as OpenAPI2
+const optionDefinitions = [
+    { name: 'SwaggerJsonPath', type: String},
+    { name: 'IApiPath', type: String },
+    { name: 'ServiceIdPath', type: String }
+  ]
 
-const IApiInteractionServiceDirectory = '../../shared/types/ApiTypes'
-const ServiceIdentifierDirectory = '../../inversify/inversifyTypes'
+const commandLineArgs = require('command-line-args')
+const options = commandLineArgs(optionDefinitions)
+const {SwaggerJsonPath, IApiPath, ServiceIdPath} = options;
 
-const imports = `import {inject} from 'inversify';
-import {operations, definitions} from './operations';
-import { IApiInteractionService } from '${IApiInteractionServiceDirectory}';
-import { SERVICE_IDENTIFIER } from '${ServiceIdentifierDirectory}';
-` 
+const schema = JSON.parse(readFileSync(SwaggerJsonPath, 'utf-8')) as OpenAPI2
 
-const routesList = []
 
-const interactionServices = []
-for (const [route, endpointDescription] of Object.entries(schema.paths!)) {
+writeFileSync("./data/operations.ts", SwaggerToTS(schema))
 
-    const capitalizedRouteName = capitalize(getNameOfRoute(route))
-    const routeWithId = capitalize(getNameOfRoute(route, "Id"))
-    const interactionService = new ClassBuilder(`${routeWithId}ApiInteractionService`,  `@inject(SERVICE_IDENTIFIER.ApiInteractionService) protected _apiService: IApiInteractionService`)
-   
-    routesList.push(`${routeWithId}: '${route}',`)
-    for (const [method, endpoint] of Object.entries(endpointDescription)) {
-        const params = endpoint.parameters.map((param: any) => `${param.name}: ${schemaTypeToTSType(param)}`)
-
-        const paramArgument = params ? `${params.join(", ")}` : "" 
-        interactionService.addPublicMethod(`${method}${capitalizedRouteName}`, paramArgument, `return this._apiService.${method}(API_ROUTES.${routeWithId}, {${endpoint.parameters.map((param: any) => param.name)}} )`)
-
-    }
-
-    interactionServices.push(interactionService.getClass())
-}
-
-const routesBlock = `const API_ROUTES = {\n ${routesList.join("\n")} }\n`
-let outputString = imports + routesBlock + interactionServices.join('\n') 
-
-// writeFileSync("./data/filename.ts", outputString)
-
-const swaggerData = SwaggerToTS(schema)
-writeFileSync("./data/operations.ts", swaggerData)
-const formatted = prettier.format(outputString, { semi: true, parser: "babel" });
-
+const prettierParams = { semi: true, parser: "typescript" }
+const formatted = prettier.format(
+    generateClasses(
+        schema, 
+        {
+            IApiInteractionServiceDirectory: IApiPath, 
+            ServiceIdentifierDirectory: ServiceIdPath
+        }
+    ), 
+    prettierParams);
 writeFileSync("./data/filename.ts", formatted)

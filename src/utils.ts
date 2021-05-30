@@ -2,6 +2,7 @@
 
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
+export const joinArrayToString = (arr: any[]) => arr ? `${arr.join(", ")}` : "" 
 
 export const schemaTypeToTSType = (param: any) => {
     if (param.type) {
