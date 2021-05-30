@@ -5,13 +5,16 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "tsc && node build/main.js",
+    "build": "rm -rf ./build && tsc",
+    "start": "npm run build && node ./build/main.js",
     "buildSchema": "openapi-typescript ./cloudswagger.json --output ./schema.ts"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.7",
     "@types/node": "^15.6.1",
+    "@types/prettier": "^2.2.3",
     "fs": "^0.0.1-security",
-    "openapi-typescript": "^3.3.1"
+    "openapi-typescript": "^3.3.1",
+    "prettier": "^2.3.0"
   }
 }

@@ -1,28 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "es2017",
-      "module": "esnext",
-      "outDir": "build",
-      "rootDir": ".",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": false,
-      "lib": [
-        "dom",
-        "es6"
-      ],
-      "skipLibCheck": false,
-      "allowSyntheticDefaultImports": true,
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": false,
-      "noEmit": false,
-      "removeComments": true,
-      "sourceMap": true,
-      "baseUrl": "./assets/src",
-    },
-    "exclude": [
-      "node_modules",
-      "dist"
-    ]
-  }
-  
+  "compilerOptions": {
+    "target": "es6",                          
+    "module": "commonjs",                    
+    "lib": ["es6"],                     
+    "allowJs": true,
+    "outDir": "build",                          
+    "rootDir": "src",
+    "strict": true,         
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "typeRoots" : ["./node_modules/@types"],
+  },
+  "include": [
+    "src/**/*"
+  ],
+}
