@@ -1,13 +1,18 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { ClassBuilder } from './ClassBuilder';
 import {capitalize, getNameOfRoute, schemaTypeToTSType} from "./utils"
-import { OpenAPI2 } from './types';
 import prettier from "prettier"
+import SwaggerToTS, {OpenAPI2} from 'openapi-typescript'
 
-const schema = JSON.parse(readFileSync("C:/Users/sapfi/Documents/projects/swaggerGenerator/cloudswagger.json", 'utf-8')) as OpenAPI2
+const schema = JSON.parse(readFileSync("C:/Users/sapfi/Documents/projects/swaggerGenerator/data/cloudswagger.json", 'utf-8')) as OpenAPI2
 
+const IApiInteractionServiceDirectory = '../../shared/types/ApiTypes'
+const ServiceIdentifierDirectory = '../../inversify/inversifyTypes'
 
-const imports = `import {inject} from 'inversify'\n
+const imports = `import {inject} from 'inversify';
+import {operations, definitions} from './operations';
+import { IApiInteractionService } from '${IApiInteractionServiceDirectory}';
+import { SERVICE_IDENTIFIER } from '${ServiceIdentifierDirectory}';
 ` 
 
 const routesList = []
@@ -32,9 +37,12 @@ for (const [route, endpointDescription] of Object.entries(schema.paths!)) {
 }
 
 const routesBlock = `const API_ROUTES = {\n ${routesList.join("\n")} }\n`
-let outputString = imports + routesBlock + interactionServices.join('} \n') 
+let outputString = imports + routesBlock + interactionServices.join('\n') 
 
+// writeFileSync("./data/filename.ts", outputString)
 
+const swaggerData = SwaggerToTS(schema)
+writeFileSync("./data/operations.ts", swaggerData)
 const formatted = prettier.format(outputString, { semi: true, parser: "babel" });
 
-writeFileSync("./filename.ts", formatted)
+writeFileSync("./data/filename.ts", formatted)

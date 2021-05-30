@@ -11,13 +11,13 @@ export class ClassBuilder {
     }
 
     public addConstructor = (args: string) => {
-        this.newClass += `constructor(${args}) { }`
+        this.newClass += `\n constructor(${args}) { }\n`
     }
 
     public addMethod = (accessModifier: AccessModifier, name: string, args: string, body: string) => {
        this.newClass += `${accessModifier} ${name} = (${args}) => {
             ${body}
-        }`
+       } \n`
     }
 
     public addPublicMethod = (name: string, args: string, body: string) => this.addMethod('public', name, args, body)
@@ -25,9 +25,6 @@ export class ClassBuilder {
     public addProtectedMethod = (name: string, args: string, body: string) => this.addMethod('protected', name, args, body)
 
     public getClass = () => {
-        return this.newClass + "\n}"
+        return this.newClass + "}\n"
     } 
-
-
-
 }

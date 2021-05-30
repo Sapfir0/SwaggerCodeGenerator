@@ -20,7 +20,7 @@ export const schemaTypeToTSType = (param: any) => {
         }
     }  
     const schemaName = param.schema['$ref'].split("/")
-    return schemaName[schemaName.length - 1]
+    return `definitions['${schemaName[schemaName.length - 1]}']`
 };
 
 
